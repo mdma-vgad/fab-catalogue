@@ -1,0 +1,30 @@
+{
+  "title": "Fab Pack Catalogue",
+  "subtitle": "Media Arts asset library",
+  "contactEmail": "",
+  "emailSubject": "Fab pack request",
+  "filters": [
+    {
+      "key": "genre",
+      "label": "Genre",
+      "options": ["Medieval", "Fantasy", "Sci-Fi", "Modern / Urban", "Post-Apocalyptic", "Horror", "Stylised", "Nature"]
+    },
+    {
+      "key": "setting",
+      "label": "Setting",
+      "options": ["Interior", "Exterior"]
+    },
+    {
+      "key": "type",
+      "label": "Type",
+      "single": true,
+      "options": ["Environment", "Asset Pack", "Character", "Gameplay System", "Tool/Plugin", "Game Template"]
+    },
+    {
+      "key": "subtype",
+      "label": "Asset pack contents",
+      "showWhen": { "key": "type", "value": "Asset Pack" },
+      "options": ["Props", "Materials", "VFX", "Audio/SFX", "Animation", "UI", "Sprites", "Foliage"]
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fab Pack Catalogue</title>
+  <meta name="description" content="Browse, search and request packs from the department's Fab asset library.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#results">Skip to packs</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <h1 id="site-title">Fab Pack Catalogue</h1>
+        <p id="site-subtitle">Media Arts asset library</p>
+      </div>
+
+      <div class="search-row">
+        <div class="search">
+          <label for="search" class="sr-only">Search packs</label>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+          <input id="search" type="search" placeholder="Search packs, e.g. tavern" autocomplete="off">
+        </div>
+        <button type="button" class="btn btn-dark filters-toggle" id="filters-open" aria-controls="filters" aria-expanded="false">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>
+          Filters
+          <span class="badge" id="filter-count" hidden>0</span>
+        </button>
+        <button type="button" class="btn btn-dark list-open-desktop" data-open-list>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>
+          My list · <span data-list-count>0</span>
+        </button>
+      </div>
+
+      <div class="active-chips" id="active-chips" aria-label="Active filters"></div>
+    </div>
+  </header>
+
+  <!-- Filter panel: a bottom sheet on phones, an inline bar on desktop -->
+  <div class="sheet-backdrop" id="filters-backdrop" hidden></div>
+  <section class="filters" id="filters" aria-label="Filters">
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <div class="filters-head">
+      <h2>Filters</h2>
+      <div>
+        <button type="button" class="btn-text" id="filters-clear">Clear all</button>
+        <button type="button" class="icon-btn" id="filters-close" aria-label="Close filters">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="filters-body" id="filter-groups"></div>
+    <div class="filters-foot">
+      <button type="button" class="btn btn-primary btn-block" id="filters-apply">Show <span data-result-count>0</span> packs</button>
+    </div>
+  </section>
+
+  <main class="page" id="results" tabindex="-1">
+    <div class="results-bar">
+      <p id="result-summary" aria-live="polite"></p>
+      <button type="button" class="btn-text" id="clear-all-inline" hidden>Clear filters</button>
+    </div>
+    <div class="grid" id="grid"></div>
+    <p class="empty" id="empty" hidden>No packs match. Try removing a filter or changing your search.</p>
+  </main>
+
+  <!-- Floating "My list" bar (phones and tablets) -->
+  <button type="button" class="list-bar" data-open-list hidden>
+    <span class="list-bar-left">
+      <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>
+      My list · <span data-list-count>0</span> packs
+    </span>
+    <span class="list-bar-right">Copy or email</span>
+  </button>
+
+  <!-- My list -->
+  <dialog class="list-dialog" id="list-dialog" aria-labelledby="list-title">
+    <div class="list-shell">
+      <header class="list-header">
+        <button type="button" class="icon-btn" data-close-list aria-label="Back to catalogue">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+        </button>
+        <h2 id="list-title">My list</h2>
+        <span class="muted"><span data-list-count>0</span> packs</span>
+      </header>
+
+      <div class="list-body">
+        <section aria-label="Selected packs">
+          <ul class="list-items" id="list-items"></ul>
+          <p class="list-empty" id="list-empty" hidden>Your list is empty. <button type="button" class="btn-link" data-close-list>Browse packs</button></p>
+        </section>
+
+        <section class="details" aria-labelledby="details-title">
+          <h3 id="details-title" class="eyebrow">Your details</h3>
+          <div class="field">
+            <label for="student-name">Name</label>
+            <input id="student-name" autocomplete="name" placeholder="e.g. Sam Taylor">
+          </div>
+          <div class="field">
+            <label for="student-project">Project or module</label>
+            <input id="student-project" placeholder="e.g. Year 2 – tavern level">
+          </div>
+        </section>
+
+        <section aria-labelledby="preview-title">
+          <h3 id="preview-title" class="eyebrow">What gets sent</h3>
+          <pre class="preview" id="message-preview"></pre>
+        </section>
+      </div>
+
+      <footer class="list-actions">
+        <button type="button" class="btn btn-outline" id="copy-list">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a1 1 0 0 1 1-1h10"/></svg>
+          <span id="copy-label">Copy list</span>
+        </button>
+        <a class="btn btn-primary" id="email-list" href="#">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          Email
+        </a>
+      </footer>
+    </div>
+  </dialog>
+
+  <template id="card-template">
+    <article class="card">
+      <div class="gallery">
+        <div class="gallery-track" tabindex="0"></div>
+        <button type="button" class="gallery-nav prev" aria-label="Previous image">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+        </button>
+        <button type="button" class="gallery-nav next" aria-label="Next image">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>
+        </button>
+        <div class="gallery-dots" aria-hidden="true"></div>
+      </div>
+      <div class="card-body">
+        <div>
+          <h2 class="card-title"></h2>
+          <p class="card-creator"></p>
+        </div>
+        <div class="chips"></div>
+        <p class="card-notes" hidden></p>
+        <div class="card-actions">
+          <a class="btn btn-outline fab-link" target="_blank" rel="noopener">
+            View on Fab
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg>
+          </a>
+          <button type="button" class="btn add-btn"></button>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <noscript><p class="noscript">This catalogue needs JavaScript turned on.</p></noscript>
+</body>
+</html>

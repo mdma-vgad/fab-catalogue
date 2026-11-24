@@ -1,0 +1,8 @@
+# Browser session for fab_capture.py - contains your Fab sign-in cookies
+.fab-profile/
+
+# Raw Fab JSON cache (regenerable)
+data/raw/
+
+__pycache__/
+.venv/
